@@ -1,10 +1,13 @@
+// src/config/rabbitmq.js
+// Configurações centralizadas do RabbitMQ
+
 const amqp = require("amqplib")
 
 class RabbitMQConfig {
   constructor() {
     this.connection = null
     this.channel = null
-    this.url = process.env.RABBITMQ_URL || "amqp://admin:admin123@localhost:5672/notifications"
+    this.url = process.env.RABBITMQ_URL || "amqp://admin:admin123@localhost:5672"
 
     // Definição das filas do sistema
     this.queues = {

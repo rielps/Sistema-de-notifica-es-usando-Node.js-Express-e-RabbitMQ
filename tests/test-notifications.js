@@ -1,4 +1,7 @@
-const axios = require("axios").default
+// tests/test-notifications.js
+// Script de teste automatizado para demonstração do sistema
+
+const axios = require("axios")
 
 class NotificationTester {
   constructor() {
