@@ -30,22 +30,6 @@ Sistema completo de notificações utilizando **Message-Oriented Middleware (MOM
 | **amqplib** | Cliente AMQP para comunicação |
 | **Docker** | Containerização do RabbitMQ |
 
-## 📁 Estrutura do Projeto
-
-\`\`\`
-src/
-├── api-gateway.js           # API Gateway (Produtor)
-├── config/rabbitmq.js       # Configurações RabbitMQ
-└── consumers/               # Consumidores especializados
-    ├── email-consumer.js    # Processador de emails
-    ├── sms-consumer.js      # Processador de SMS
-    └── push-consumer.js     # Processador de push notifications
-tests/
-└── test-notifications.js   # Testes automatizados
-scripts/
-├── start-all.sh            # Script de inicialização
-└── test-demo.sh            # Script de demonstração
-\`\`\`
 
 ## 🚀 Como Executar
 
