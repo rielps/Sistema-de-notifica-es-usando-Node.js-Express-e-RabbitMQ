@@ -1,0 +1,52 @@
+# Docker Compose para Sistema de Notificações
+# Este arquivo configura todos os serviços necessários para o sistema
+version: '3.8'
+
+services:
+  # Serviço RabbitMQ - Message Oriented Middleware (MOM)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: notification-rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"   # Porta AMQP para comunicação
+      - "15672:15672" # Porta do painel administrativo
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+      RABBITMQ_DEFAULT_VHOST: /notifications
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - notification-network
+
+  # API Gateway - Produtor de mensagens
+  api-gateway:
+    build: .
+    container_name: notification-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672/notifications
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - notification-network
+    restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
+    driver: local
+
+networks:
+  notification-network:
+    driver: bridge
